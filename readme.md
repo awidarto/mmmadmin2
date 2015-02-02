@@ -1,4 +1,4 @@
-Asset Management Demo CM
+MuMoMu Admin
 
 ### License
 

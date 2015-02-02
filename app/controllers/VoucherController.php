@@ -430,21 +430,20 @@ class VoucherController extends AdminController {
 
     public function namePic($data)
     {
-        $name = HTML::link('property/view/'.$data['_id'],$data['address']);
+        $name = HTML::link('media/view/'.$data['_id'],$data['address']);
 
         $thumbnail_url = '';
 
-        if(isset($data['files']) && count($data['files'])){
+        $md = Media::find($data['mediaId']);
+
+        if(isset($md['defaultpic'])){
             $glinks = '';
 
-            $gdata = $data['files'][$data['defaultpic']];
+            $gdata = $md['defaultpic'];
 
             $thumbnail_url = $gdata['thumbnail_url'];
-            foreach($data['files'] as $g){
-                $g['caption'] = ( isset($g['caption']) && $g['caption'] != '')?$g['caption']:$data['SKU'];
-                $g['full_url'] = isset($g['full_url'])?$g['full_url']:$g['fileurl'];
-                $glinks .= '<input type="hidden" class="g_'.$data['_id'].'" data-caption="'.$g['caption'].'" value="'.$g['full_url'].'" >';
-            }
+
+            $glinks .= '<input type="hidden" class="g_'.$data['_id'].'" data-caption="'.$data['title'].'" value="'.$gdata['full_url'].'" >';
 
             $display = HTML::image($thumbnail_url.'?'.time(), $thumbnail_url, array('class'=>'thumbnail img-polaroid','style'=>'cursor:pointer;','id' => $data['_id'])).$glinks;
             return $display;
@@ -452,6 +451,7 @@ class VoucherController extends AdminController {
             return $data['SKU'];
         }
     }
+
 
     public function dispBar($data)
 

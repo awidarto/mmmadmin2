@@ -12,7 +12,7 @@ class TransactionController extends AdminController {
         //$this->crumb->append('Home','left',true);
         //$this->crumb->append(strtolower($this->controller_name));
 
-        $this->model = new Asset();
+        $this->model = new Credittrx();
         //$this->model = DB::collection('documents');
 
     }
@@ -29,24 +29,16 @@ class TransactionController extends AdminController {
     {
 
         $this->heads = array(
-            //array('Photos',array('search'=>false,'sort'=>false)),
-            array('Asset ID',array('search'=>true,'sort'=>true)),
-            //array('Code',array('search'=>true,'sort'=>true, 'attr'=>array('class'=>'span2'))),
-            array('Picture',array('search'=>true,'sort'=>true ,'attr'=>array('class'=>'span2'))),
-            array('Description',array('search'=>true,'sort'=>true)),
-            array('Type',array('search'=>true,'sort'=>true, 'select'=>Assets::getType()->TypeToSelection('type','type',true) )),
-            array('IP',array('search'=>true,'sort'=>true)),
-            array('Host Name',array('search'=>true,'sort'=>true)),
-            array('Location',array('search'=>true,'sort'=>true,'class'=>'location','select'=>Assets::getLocation()->LocationToSelection('_id','name',true) )),
-            array('Rack',array('search'=>true,'sort'=>true,'class'=>'rack','attr'=>array('class'=>'col-md-2 rack'),'select'=>Assets::getRack()->RackToSelection('_id','SKU',true) )),
-            array('Tags',array('search'=>true,'sort'=>true)),
-            array('Created',array('search'=>true,'sort'=>true,'datetimerange'=>true)),
-            array('Last Update',array('search'=>true,'sort'=>true,'datetimerange'=>true)),
+            array('Media',array('search'=>true,'sort'=>true,'callback'=>'namePic' ,'attr'=>array('class'=>'span2'))),
+            array('Trx ID',array('search'=>true,'sort'=>true, 'select'=>array(''=>'All','pending'=>'Pending', 'approved'=>'Approved' ) )),
+            array('Amount',array('search'=>true,'sort'=>true)),
+            array('Status',array('search'=>true,'sort'=>true)),
+            array('Created',array('search'=>true,'sort'=>true,'datetimerange'=>true))
         );
 
         //print $this->model->where('docFormat','picture')->get()->toJSON();
 
-        $this->title = 'Asset';
+        $this->title = 'Credit Transaction';
 
         $this->place_action = 'first';
 
@@ -64,19 +56,11 @@ class TransactionController extends AdminController {
     {
 
         $this->fields = array(
-            //array('SKU',array('kind'=>'text','query'=>'like','pos'=>'both','callback'=>'namePic','show'=>true)),
-            array('SKU',array('kind'=>'text','query'=>'like','pos'=>'both','callback'=>'dispBar','attr'=>array('class'=>'expander'),'show'=>true)),
-            //array('SKU',array('kind'=>'text','callback'=>'dispBar', 'query'=>'like','pos'=>'both','show'=>true)),
-            array('SKU',array('kind'=>'text', 'callback'=>'namePic', 'query'=>'like','pos'=>'both','show'=>true)),
-            array('itemDescription',array('kind'=>'text','query'=>'like','pos'=>'both','attr'=>array('class'=>'expander'),'show'=>true)),
-            array('assetType',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-            array('IP',array('kind'=>'numeric','query'=>'like','pos'=>'both','show'=>true)),
-            array('hostName',array('kind'=>'numeric','query'=>'like','pos'=>'both','show'=>true)),
-            array('locationId',array('kind'=>'text','query'=>'like','pos'=>'both','callback'=>'locationName','show'=>true)),
-            array('rackId',array('kind'=>'text', 'query'=>'like','pos'=>'both','callback'=>'rackName','show'=>true)),
-            array('tags',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true,'callback'=>'splitTag')),
-            array('createdDate',array('kind'=>'datetimerange','query'=>'like','pos'=>'both','show'=>true)),
-            array('lastUpdate',array('kind'=>'datetimerange','query'=>'like','pos'=>'both','show'=>true)),
+            array('mediaId',array('kind'=>'text', 'query'=>'like','pos'=>'both','show'=>true)),
+            array('trx_id',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+            array('amount',array('kind'=>'numeric','query'=>'like','pos'=>'both','show'=>true)),
+            array('trxStatus',array('kind'=>'numeric','query'=>'like','pos'=>'both','show'=>true)),
+            array('createdDate',array('kind'=>'datetimerange','query'=>'like','pos'=>'both','show'=>true))
         );
 
         $categoryFilter = Input::get('categoryFilter');
